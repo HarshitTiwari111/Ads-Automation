@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { AuthProvider, useAuth } from './context/AuthContext';
+import ErrorBoundary from './components/ErrorBoundary';
 import Sidebar from './components/layout/Sidebar';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -16,6 +17,7 @@ const PerformancePage = lazy(() => import('./pages/PerformancePage'));
 const Reports = lazy(() => import('./pages/Reports'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Profile = lazy(() => import('./pages/Profile'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 const PageLoader = () => (
   <div className="loading"><div className="spinner" /></div>
@@ -53,16 +55,19 @@ const AppRoutes = () => {
       <Route path="/reports" element={<PrivateRoute><AppLayout><Reports /></AppLayout></PrivateRoute>} />
       <Route path="/profile" element={<PrivateRoute><AppLayout><Profile /></AppLayout></PrivateRoute>} />
       <Route path="/settings" element={<PrivateRoute><AppLayout><Settings /></AppLayout></PrivateRoute>} />
+      <Route path="*" element={<PrivateRoute><AppLayout><NotFound /></AppLayout></PrivateRoute>} />
     </Routes>
   );
 };
 
 const App = () => (
   <AuthProvider>
-    <Router>
-      <AppRoutes />
-      <ToastContainer position="top-right" autoClose={3000} />
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <AppRoutes />
+        <ToastContainer position="top-right" autoClose={3000} />
+      </Router>
+    </ErrorBoundary>
   </AuthProvider>
 );
 
