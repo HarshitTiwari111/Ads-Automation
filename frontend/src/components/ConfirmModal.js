@@ -10,7 +10,7 @@ const ConfirmModal = ({ show, title, message, confirmText, cancelText, onConfirm
         <p style={{ color: '#6b7280', lineHeight: 1.5 }}>
           {message || 'This action cannot be undone.'}
         </p>
-        <div className="modal-actions" style={{ marginTop: 16 }}>
+        <div className="modal-actions">
           <button className="btn btn-secondary" onClick={onCancel}>
             {cancelText || 'Cancel'}
           </button>
