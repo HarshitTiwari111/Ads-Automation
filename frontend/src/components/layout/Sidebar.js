@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import ConfirmModal from '../ConfirmModal';
 import {
   MdDashboard,
   MdPeople,
@@ -16,7 +17,8 @@ import {
 
 const Sidebar = () => {
   const { user, logout, darkMode, toggleDarkMode } = useAuth();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const navItems = [
     { path: '/', label: 'Dashboard', icon: <MdDashboard /> },
@@ -74,7 +76,7 @@ const Sidebar = () => {
           {darkMode ? 'Light Mode' : 'Dark Mode'}
         </button>
         <button
-          onClick={logout}
+          onClick={() => setShowLogoutModal(true)}
           style={{
             display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px',
             background: 'none', border: 'none', color: 'rgba(255,255,255,0.7)',
@@ -88,6 +90,17 @@ const Sidebar = () => {
         </button>
       </div>
     </div>
+
+    <ConfirmModal
+      show={showLogoutModal}
+      title="Logout"
+      message="Are you sure you want to logout?"
+      confirmText="Yes, Logout"
+      cancelText="Cancel"
+      onConfirm={() => { setShowLogoutModal(false); logout(); }}
+      onCancel={() => setShowLogoutModal(false)}
+      danger
+    />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,25 +7,34 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Sidebar from './components/layout/Sidebar';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import Accounts from './pages/Accounts';
-import AccountDetail from './pages/AccountDetail';
-import Campaigns from './pages/Campaigns';
-import PerformancePage from './pages/PerformancePage';
-import Reports from './pages/Reports';
-import Settings from './pages/Settings';
-import Profile from './pages/Profile';
+
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Accounts = lazy(() => import('./pages/Accounts'));
+const AccountDetail = lazy(() => import('./pages/AccountDetail'));
+const Campaigns = lazy(() => import('./pages/Campaigns'));
+const PerformancePage = lazy(() => import('./pages/PerformancePage'));
+const Reports = lazy(() => import('./pages/Reports'));
+const Settings = lazy(() => import('./pages/Settings'));
+const Profile = lazy(() => import('./pages/Profile'));
+
+const PageLoader = () => (
+  <div className="loading"><div className="spinner" /></div>
+);
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
-  if (loading) return <div className="loading"><div className="spinner" /></div>;
+  if (loading) return <PageLoader />;
   return user ? children : <Navigate to="/login" />;
 };
 
 const AppLayout = ({ children }) => (
   <div className="app-container">
     <Sidebar />
-    <div className="main-content">{children}</div>
+    <div className="main-content">
+      <Suspense fallback={<PageLoader />}>
+        {children}
+      </Suspense>
+    </div>
   </div>
 );
 

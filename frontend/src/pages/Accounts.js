@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { MdAdd, MdSearch, MdDelete, MdVisibility, MdEdit } from 'react-icons/md';
 import { accountsAPI } from '../services/api';
+import ConfirmModal from '../components/ConfirmModal';
 
 const emptyForm = { accountName: '', clientName: '', clientEmail: '', industry: '', website: '' };
 
@@ -13,6 +14,7 @@ const Accounts = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingAccount, setEditingAccount] = useState(null);
   const [form, setForm] = useState(emptyForm);
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   const fetchAccounts = async () => {
     try {
@@ -64,14 +66,16 @@ const Accounts = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this account?')) return;
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      await accountsAPI.delete(id);
+      await accountsAPI.delete(deleteTarget);
       toast.success('Account deleted');
+      setDeleteTarget(null);
       fetchAccounts();
     } catch (error) {
       toast.error('Failed to delete account');
+      setDeleteTarget(null);
     }
   };
 
@@ -130,7 +134,7 @@ const Accounts = () => {
                       <div style={{ display: 'flex', gap: 8 }}>
                         <Link to={`/accounts/${acc._id}`} className="btn btn-secondary btn-sm"><MdVisibility /></Link>
                         <button className="btn btn-secondary btn-sm" onClick={() => openEdit(acc)}><MdEdit /></button>
-                        <button className="btn btn-danger btn-sm" onClick={() => handleDelete(acc._id)}><MdDelete /></button>
+                        <button className="btn btn-danger btn-sm" onClick={() => setDeleteTarget(acc._id)}><MdDelete /></button>
                       </div>
                     </td>
                   </tr>
@@ -140,6 +144,17 @@ const Accounts = () => {
           </table>
         </div>
       </div>
+
+      <ConfirmModal
+        show={!!deleteTarget}
+        title="Delete Account"
+        message="Are you sure you want to delete this account? This will also remove all associated campaigns and data."
+        confirmText="Yes, Delete"
+        cancelText="Cancel"
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+        danger
+      />
 
       {showModal && (
         <div className="modal-overlay" onClick={() => { setShowModal(false); setEditingAccount(null); }}>
