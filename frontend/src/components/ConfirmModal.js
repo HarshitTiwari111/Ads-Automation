@@ -5,12 +5,12 @@ const ConfirmModal = ({ show, title, message, confirmText, cancelText, onConfirm
 
   return (
     <div className="modal-overlay" onClick={onCancel}>
-      <div className="modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: 420 }}>
-        <h2 style={{ fontSize: 18 }}>{title || 'Are you sure?'}</h2>
-        <p style={{ color: '#6b7280', margin: '12px 0 24px', lineHeight: 1.5 }}>
+      <div className="modal confirm-modal" onClick={(e) => e.stopPropagation()}>
+        <h2>{title || 'Are you sure?'}</h2>
+        <p style={{ color: '#6b7280', lineHeight: 1.5 }}>
           {message || 'This action cannot be undone.'}
         </p>
-        <div className="modal-actions">
+        <div className="modal-actions" style={{ marginTop: 16 }}>
           <button className="btn btn-secondary" onClick={onCancel}>
             {cancelText || 'Cancel'}
           </button>
