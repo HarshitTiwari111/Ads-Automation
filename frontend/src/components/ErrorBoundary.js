@@ -1,4 +1,5 @@
 import React from 'react';
+import { MdWarning } from 'react-icons/md';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class ErrorBoundary extends React.Component {
     if (this.state.hasError) {
       return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', textAlign: 'center', padding: 24 }}>
-          <div style={{ fontSize: 48, marginBottom: 12 }}>⚠</div>
+          <MdWarning size={48} color="#f59e0b" style={{ marginBottom: 12 }} />
           <h2 style={{ fontSize: 20, fontWeight: 600, marginBottom: 8 }}>Something went wrong</h2>
           <p style={{ color: '#6b7280', marginBottom: 20, fontSize: 14 }}>An unexpected error occurred. Please try refreshing the page.</p>
           <button

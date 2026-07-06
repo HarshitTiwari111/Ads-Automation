@@ -13,6 +13,7 @@ import {
   MdPerson,
   MdDarkMode,
   MdLightMode,
+  MdMenu,
 } from 'react-icons/md';
 
 const Sidebar = () => {
@@ -33,7 +34,7 @@ const Sidebar = () => {
   return (
     <>
     <button className="mobile-menu-btn" onClick={() => setMobileOpen(!mobileOpen)}>
-      &#9776;
+      <MdMenu size={24} />
     </button>
     {mobileOpen && <div className="sidebar-overlay" onClick={() => setMobileOpen(false)} />}
     <div className={`sidebar ${mobileOpen ? 'sidebar-open' : ''}`}>
